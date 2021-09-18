@@ -4,8 +4,8 @@ from config import LABELS_LIST, MODEL
 with open('train_dataset.pickle','rb') as f_p:
     train_dataset = pickle.load(f_p)
 
-with open('eval_dataset.pickle','rb') as f_p:
-    eval_dataset = pickle.load(f_p)
+with open('eval_dataset_small.pickle','rb') as f_p:
+    eval_dataset_small = pickle.load(f_p)
 
 with open('eval_dataset_full.pickle','rb') as f_p:
     eval_dataset_full = pickle.load(f_p)
@@ -25,10 +25,15 @@ training_args = TrainingArguments("test_trainer",
         per_device_train_batch_size=4,
         per_device_eval_batch_size=4,
         evaluation_strategy='steps',
-        eval_steps=2_000,
-        gradient_accumulation_steps=10,
+        #eval_steps=2_000,
+        #save_steps=2_000,
+        eval_steps=20_000,
+        save_steps=20_000,
+        num_train_epochs=1,
+        gradient_accumulation_steps=2,
         learning_rate = 1e-6,
-        warmup_steps=4_000,
+        #warmup_steps=4_000,
+        warmup_steps=4,
         load_best_model_at_end=True,
         )
 
@@ -49,10 +54,11 @@ trainer = Trainer(
             model=model,
             args=training_args,
             train_dataset=train_dataset,
-            eval_dataset=eval_dataset,
+            eval_dataset=eval_dataset_small,
             compute_metrics=compute_metrics,
             )
 
+#trainer.train(resume_from_checkpoint=True)
 trainer.train()
 trainer.save_model("./roberta-retrained")
 trainer.evaluate()

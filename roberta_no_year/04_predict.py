@@ -8,7 +8,7 @@ device = 'cpu'
 
 from transformers import AutoModelForSequenceClassification
 
-model = AutoModelForSequenceClassification.from_pretrained('test_trainer/checkpoint-82000/')
+model = AutoModelForSequenceClassification.from_pretrained('test_trainer/checkpoint-80/')
 tokenizer = AutoTokenizer.from_pretrained(MODEL)
 
 for dataset in ('dev-0', 'test-A'):

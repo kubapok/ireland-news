@@ -16,14 +16,14 @@ test_tokenized_datasets = test_dataset.map(tokenize_function, batched=True)
 
 train_dataset = tokenized_datasets["train"].shuffle(seed=42)
 eval_dataset_full = tokenized_datasets["test"]
-eval_dataset = tokenized_datasets["test"].select(range(2000))
+eval_dataset_small = tokenized_datasets["test"].select(range(2000))
 test_dataset = test_tokenized_datasets["train"]
 
 with open('train_dataset.pickle','wb') as f_p:
     pickle.dump(train_dataset, f_p)
 
-with open('eval_dataset.pickle','wb') as f_p:
-    pickle.dump(eval_dataset, f_p)
+with open('eval_dataset_small.pickle','wb') as f_p:
+    pickle.dump(eval_dataset_small, f_p)
 
 with open('eval_dataset_full.pickle','wb') as f_p:
     pickle.dump(eval_dataset_full, f_p)
