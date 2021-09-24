@@ -10,21 +10,11 @@ with open('eval_dataset_small.pickle','rb') as f_p:
 with open('eval_dataset_full.pickle','rb') as f_p:
     eval_dataset_full = pickle.load(f_p)
 
-with open('test_dataset.pickle','rb') as f_p:
-    test_dataset = pickle.load(f_p)
 
 
 from transformers import AutoModelForSequenceClassification
 
-#model = AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=7)
-model_clean = AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=7)
-model = AutoModelForSequenceClassification.from_pretrained('test_trainer_guess_weekday/checkpoint-6000',num_labels=7)
-import torch
-with torch.no_grad():
-    model.classifier.dense.weight = model_clean.classifier.dense.weight
-    model.classifier.out_proj.weight = model_clean.classifier.out_proj.weight
-
-del model_clean
+model = AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=7)
 
 from transformers import TrainingArguments
 
@@ -37,7 +27,7 @@ training_args = TrainingArguments("test_trainer",
         #save_steps=2_000,
         eval_steps=2_000,
         save_steps=20_000,
-        num_train_epochs=5,
+        num_train_epochs=1,
         gradient_accumulation_steps=2,
         learning_rate = 1e-6,
         #warmup_steps=4_000,
@@ -78,7 +68,3 @@ with open('../dev-0/out.tsv', 'w') as f_out:
     for pred in eval_predictions:
         f_out.write(LABELS_LIST[pred] + '\n')
 
-test_predictions = trainer.predict(test_dataset).predictions.argmax(1)
-with open('../test-A/out.tsv', 'w') as f_out:
-    for pred in test_predictions:
-        f_out.write(LABELS_LIST[pred] + '\n')

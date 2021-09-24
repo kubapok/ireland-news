@@ -4,8 +4,8 @@ from transformers import AutoTokenizer
 from config import MODEL
 from tqdm import tqdm
 
-dataset = load_dataset('csv', sep='\t', data_files={'train': ['../train/huggingface_format_year.csv'], 'test': ['../dev-0/huggingface_format_year.csv']})
-test_dataset = load_dataset('csv', sep='\t', data_files='../test-A/huggingface_format_year.csv')
+dataset = load_dataset('csv', sep='\t', data_files={'train': ['../train/huggingface_guess_day.csv'], 'test': ['../dev-0/huggingface_guess_day.csv']})
+test_dataset = load_dataset('csv', sep='\t', data_files='../test-A/huggingface_format_year.tsv')
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL)
 
@@ -13,7 +13,10 @@ def tokenize_function(examples):
     t = tokenizer(examples["text"], padding="max_length", truncation=True)
     examples['year'] = [x - 1995 for x in examples['year']]
     for column in 'date', 'day_of_month', 'day_of_year', 'month', 'year', 'weekday', 'year_cont':
-        t[column] = [[a] * b.index(1) + [0] *(len(b) - b.index(1)) for a,b in zip(examples[column], t['input_ids'])]
+        try:
+            t[column] = [[a] * b.index(1) + [0] *(len(b) - b.index(1)) for a,b in zip(examples[column], t['input_ids'])]
+        except:
+            pass
     return t
 
 test_tokenized_datasets = test_dataset.map(tokenize_function, batched=True)

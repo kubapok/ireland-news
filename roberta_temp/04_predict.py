@@ -16,15 +16,7 @@ with open('test_dataset.pickle','rb') as f_p:
 
 from transformers import AutoModelForSequenceClassification
 
-#model = AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=7)
-model_clean = AutoModelForSequenceClassification.from_pretrained(MODEL, num_labels=7)
-model = AutoModelForSequenceClassification.from_pretrained('test_trainer_guess_weekday/checkpoint-6000',num_labels=7)
-import torch
-with torch.no_grad():
-    model.classifier.dense.weight = model_clean.classifier.dense.weight
-    model.classifier.out_proj.weight = model_clean.classifier.out_proj.weight
-
-del model_clean
+model = AutoModelForSequenceClassification.from_pretrained('roberta-retrained/')
 
 from transformers import TrainingArguments
 
@@ -37,7 +29,7 @@ training_args = TrainingArguments("test_trainer",
         #save_steps=2_000,
         eval_steps=2_000,
         save_steps=20_000,
-        num_train_epochs=5,
+        num_train_epochs=1,
         gradient_accumulation_steps=2,
         learning_rate = 1e-6,
         #warmup_steps=4_000,
@@ -66,11 +58,6 @@ trainer = Trainer(
             compute_metrics=compute_metrics,
             )
 
-#trainer.train(resume_from_checkpoint=True)
-trainer.train()
-trainer.save_model("./roberta-retrained")
-trainer.evaluate()
-
 
 eval_predictions = trainer.predict(eval_dataset_full).predictions.argmax(1)
 
@@ -82,3 +69,17 @@ test_predictions = trainer.predict(test_dataset).predictions.argmax(1)
 with open('../test-A/out.tsv', 'w') as f_out:
     for pred in test_predictions:
         f_out.write(LABELS_LIST[pred] + '\n')
+
+#model = AutoModelForSequenceClassification.from_pretrained('roberta-retrained/')
+
+#for dataset in ('dev-0', 'test-A'):
+#    with open(f'../{dataset}/in.tsv') as f_in, open(f'../{dataset}/out.tsv','w') as f_out:
+#        for line_in in tqdm(f_in, total=150_000):
+#            _,_, text = line_in.split('\t')
+#            text = text.rstrip('\n')
+#            inputs = tokenizer(text, padding=True, truncation=True, return_tensors="pt").to(device)
+#            outputs = model(**inputs)
+#            probs = outputs[0].softmax(1)
+#            prediction = LABELS_LIST[probs.argmax(1)]
+#            f_out.write(prediction + '\n')
+#
