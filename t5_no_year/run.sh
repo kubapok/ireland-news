@@ -1,8 +1,8 @@
 python run_summarization.py \
-    --model_name_or_path t5-base \
+    --model_name_or_path google/t5-v1_1-base \
     --do_train \
     --train_file ../train/huggingface_format.csv \
-    --validation_file ../dev-0/huggingface_format.csv \
+    --validation_file ../dev-0/huggingface_format_short.csv \
     --source_prefix "classify: " \
     --summary_column 'label' \
     --max_target_length=4 \
@@ -10,6 +10,9 @@ python run_summarization.py \
     --output_dir ./t5-retrained \
     --per_device_train_batch_size=16 \
     --per_device_eval_batch_size=16 \
+    --gradient_accumulation_steps=4 \
     --overwrite_output_dir \
     --predict_with_generate \
     --save_steps=10000 \
+    --eval_steps=10000 \
+    --evaluation_strategy steps
