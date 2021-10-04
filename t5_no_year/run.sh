@@ -7,6 +7,7 @@ python run_summarization.py \
     --summary_column 'label' \
     --max_target_length=4 \
     --max_source_length=64 \
+    --num_train_epochs 20 \
     --output_dir ./t5-retrained \
     --per_device_train_batch_size=16 \
     --per_device_eval_batch_size=16 \

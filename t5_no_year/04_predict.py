@@ -4,7 +4,7 @@ from tqdm import tqdm
 from config import LABELS_LIST
 
 device = 'cuda'
-model_path= 't5-retrained'
+model_path= 't5-retrained/checkpoint-110000'
 
 
 from transformers import AutoModelForSequenceClassification
