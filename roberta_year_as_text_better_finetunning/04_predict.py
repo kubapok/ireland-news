@@ -21,7 +21,7 @@ model = AutoModelForSequenceClassification.from_pretrained('roberta-ireland').cu
 from transformers import TrainingArguments
 
 
-training_args = TrainingArguments("test_trainer",
+training_args = TrainingArguments("roberta-ireland",
         per_device_train_batch_size=4,
         per_device_eval_batch_size=4,
         evaluation_strategy='steps',
