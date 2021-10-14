@@ -3,12 +3,12 @@ from config import LABELS_LIST, MODEL
 from transformers import AutoTokenizer
 from tqdm import tqdm
 
-device = 'cpu'
-
+device = 'cuda'
+model_path= './roberta-ireland'
 
 from transformers import AutoModelForSequenceClassification
 
-model = AutoModelForSequenceClassification.from_pretrained('test_trainer/checkpoint-620000/')
+model = AutoModelForSequenceClassification.from_pretrained(model_path).cuda()
 tokenizer = AutoTokenizer.from_pretrained(MODEL)
 
 for dataset in ('dev-0', 'test-A'):
