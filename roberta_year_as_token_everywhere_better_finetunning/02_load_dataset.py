@@ -5,7 +5,7 @@ from config import MODEL
 from tqdm import tqdm
 
 dataset = load_dataset('csv', sep='\t', data_files={'train': ['../train/huggingface_format_year_clear.csv'], 'test': ['../dev-0/huggingface_format_year_clear.csv']})
-test_dataset = load_dataset('csv', sep='\t', data_files='../test-A/huggingface_format_year.csv')
+test_dataset = load_dataset('csv', sep='\t', data_files='../test-A/huggingface_format_year_clear.csv')
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL)
 
