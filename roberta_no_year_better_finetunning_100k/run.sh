@@ -1,0 +1,1 @@
+python run_glue.py --max_steps 111273   --model_name_or_path roberta-base   --train_file ../train_100k/huggingface_format.csv --validation_file ../dev-0/huggingface_format.csv     --do_train       --max_seq_length 64   --per_device_train_batch_size 32   --learning_rate 2e-5     --save_steps 50000 --eval_steps 50000 --evaluation_strategy steps   --output_dir ./roberta-ireland
